@@ -57,8 +57,6 @@ class addtaskCog(commands.Cog, name="ping command"):
     @commands.command(name="removetask", usage=" [task]", description="Removes task from everyday routine.", aliases=['rt'])
     @commands.cooldown(1, 2, commands.BucketType.member)
     async def removetask(self, ctx, task):
-
-
         data = read()
         try:
             time = data['times'][data['tasks'].index(task)]

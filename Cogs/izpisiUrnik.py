@@ -12,9 +12,9 @@ class izpisUrnikaCog(commands.Cog, name="izpisUrnika"):
     def __init__(self, bot: commands.bot):
         self.bot = bot
 
-    @commands.command(name="izpis", usage="", description="izpise urnik", aliases=['id'])
+    @commands.command(name="schedule", usage="", description="Give you schedule fot the day", aliases=['s'])
     @commands.cooldown(1, 2, commands.BucketType.member)
-    async def izpis(self, ctx):
+    async def schedule(self, ctx):
 
         urnik = preberiUrnik()
         
@@ -23,7 +23,7 @@ class izpisUrnikaCog(commands.Cog, name="izpisUrnika"):
         urnik2 = discord.Embed(
             title="Urnik",
             description="",
-            color=discord.Color.random(),
+            color=discord.Color.dark_blue(),
         )
         
         for i in range(stOpravil):
