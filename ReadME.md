@@ -8,9 +8,17 @@ TOKEN=[Discord bot token]
 Discord bot token - obtained on Discord Dev Portal [Here](https://discord.com/developers/applications)
 
 # Commands
+<<<<<<< Updated upstream
 
 List of command can be acccesed from typing **m!help**. It will show every command:
 
+=======
+<<<<<<< HEAD
+List of command can be acccesed from typing **m!help**. It will show every command:
+=======
+List of command can be accessed from typing **m!help**. It will show every command:
+>>>>>>> 5389cf302eea3335164fb5f7c892e7f3ba73f9c5
+>>>>>>> Stashed changes
 ![Images](/assets/images/help.png)
 
 # Invite bot to server?
