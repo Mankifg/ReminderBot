@@ -14,11 +14,7 @@ def read():
 class tasksCog(commands.Cog, name="ping command"):
     def __init__(self, bot: commands.bot):
         self.bot = bot
-
-    @tasks.loop(seconds=10)
-    async def check_for_tasks():
-        print('abc')   
-
+  
     @commands.command(name="setchannel", usage="", description="Sets channel for preset events.", aliases=['sc'])
     @commands.has_permissions(administrator=True)
     async def setchannel(self, ctx, channel: discord.TextChannel):
