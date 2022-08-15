@@ -22,9 +22,9 @@ async def status_swap():
 
 
 class Greetings(commands.Cog):
-	def __init__(self, bot):
-		self.bot = bot
-		self._last_member = None
+    def __init__(self, bot):
+        self.bot = bot
+        self._last_member = None
 
 
 intents = discord.Intents.default()
@@ -38,9 +38,9 @@ bot = commands.Bot(
 
 #load cogs
 if __name__ == '__main__':
-	for filename in os.listdir("Cogs"):
-		if filename.endswith(".py"):
-			bot.load_extension(f"Cogs.{filename[:-3]}")
+    for filename in os.listdir("Cogs"):
+        if filename.endswith(".py"):
+            bot.load_extension(f"Cogs.{filename[:-3]}")
 
 @bot.event
 async def on_ready():
