@@ -2,8 +2,6 @@ import discord
 from discord.ext import commands
 import json
 
-print("test\n")
-
 def preberiUrnik():
     with open('./data/schedule.json', 'r') as f:
         data = json.load(f)
@@ -19,9 +17,7 @@ class izpisUrnikaCog(commands.Cog, name="izpisUrnika"):
     async def izpis(self, ctx):
 
         urnik = preberiUrnik()
-
-        print(f"urnik: {urnik}, type : {type(urnik)}")
-
+        
         stOpravil = len(urnik["tasks"])
 
         urnik2 = discord.Embed(
