@@ -19,5 +19,8 @@ Sure, just click [Here](https://discord.com/api/oauth2/authorize?client_id=10086
 # Contributing
 If you find any issue or have suggestion, fell free to subbimt a **PR**.
 
+# Test
+This is a test
+
 # Test 2 
 llalalall
