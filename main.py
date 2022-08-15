@@ -11,7 +11,9 @@ load_dotenv()
 token = os.getenv('TOKEN')
 
 
-prefix = "!"
+
+
+
 
 status = cycle(["Made by Mankifg#1810","Made by luka heric#9699", "Watching You", "m!help"])
 @tasks.loop(seconds=10)
@@ -28,7 +30,7 @@ class Greetings(commands.Cog):
 intents = discord.Intents.default()
 
 bot = commands.Bot(
-    command_prefix=prefix,
+    command_prefix='m!',
     help_command=None,
     description="Poletni Tabor Računalništva",
     intents=intents,
