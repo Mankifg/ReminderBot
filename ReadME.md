@@ -8,7 +8,7 @@ TOKEN=[Discord bot token]
 Discord bot token - obtained on Discord Dev Portal [Here](https://discord.com/developers/applications)
 
 # Commands
-List of command can be acced from typing **m!help**. It will show every command:
+List of command can be acccesed from typing **m!help**. It will show every command:
 ![Images](/assets/images/help.png)
 
 # Contributing
