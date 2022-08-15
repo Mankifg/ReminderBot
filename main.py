@@ -46,6 +46,5 @@ if __name__ == '__main__':
 async def on_ready():
     print("We have logged in as {0.user}".format(bot))
     status_swap.start()
-    check_for_tasks.start()
 
 bot.run(token)

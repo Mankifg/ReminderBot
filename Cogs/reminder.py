@@ -77,3 +77,5 @@ class ReminderCog(commands.Cog, name="ping command"):
             )
             await ctx.send(embed=q)
             
+def setup(bot: commands.Bot):
+    bot.add_cog(ReminderCog(bot))
