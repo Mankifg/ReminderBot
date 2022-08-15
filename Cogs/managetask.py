@@ -23,7 +23,6 @@ def addSorted(data, task, time):
         ure = int(ure)
         min = int(min)
         if (novaUra * 60 + noveMin < ure * 60 + min):
-            print(i)
             data['times'].insert(i, time)
             data['tasks'].insert(i, task)
             return
