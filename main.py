@@ -11,7 +11,9 @@ load_dotenv()
 token = os.getenv('TOKEN')
 
 
-prefix = "m!"
+
+
+
 
 status = cycle(["Made by Mankifg#1810","Made by luka heric#9699", "Watching You", "m!help"])
 @tasks.loop(seconds=10)
@@ -20,15 +22,15 @@ async def status_swap():
 
 
 class Greetings(commands.Cog):
-	def __init__(self, bot):
-		self.bot = bot
-		self._last_member = None
+    def __init__(self, bot):
+        self.bot = bot
+        self._last_member = None
 
 
 intents = discord.Intents.default()
 
 bot = commands.Bot(
-    command_prefix=prefix,
+    command_prefix='m!',
     help_command=None,
     description="Poletni Tabor Računalništva",
     intents=intents,
@@ -36,9 +38,9 @@ bot = commands.Bot(
 
 #load cogs
 if __name__ == '__main__':
-	for filename in os.listdir("Cogs"):
-		if filename.endswith(".py"):
-			bot.load_extension(f"Cogs.{filename[:-3]}")
+    for filename in os.listdir("Cogs"):
+        if filename.endswith(".py"):
+            bot.load_extension(f"Cogs.{filename[:-3]}")
 
 @bot.event
 async def on_ready():
