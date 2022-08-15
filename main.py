@@ -11,7 +11,7 @@ load_dotenv()
 token = os.getenv('TOKEN')
 
 
-prefix = "!"
+prefix = "m!"
 
 status = cycle(["Made by Mankifg#1810","Made by luka heric#9699", "Watching You", "m!help"])
 @tasks.loop(seconds=10)
