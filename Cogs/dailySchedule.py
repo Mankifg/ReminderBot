@@ -1,5 +1,6 @@
 from ast import alias
 from calendar import WEDNESDAY
+from types import NoneType
 import discord
 from discord.ext import commands, tasks
 from itertools import cycle
@@ -61,8 +62,6 @@ class dailyCog(commands.Cog, name="ping command"):
                 channel = self.bot.get_channel(int(open('data/channel.txt', 'r').read()))
                 await channel.send('@everyone')
 
-                stOpravil = len(data["tasks"])
-
                 urnik2 = discord.Embed(
                     title=f"Urnik {datetime.datetime.now().strftime('%d.%m.%Y %H:%M')} - **{dnevi[datetime.datetime.today().weekday()]}**",
                     description="",
@@ -77,12 +76,7 @@ class dailyCog(commands.Cog, name="ping command"):
                         inline=False,
                     )
 
-                    for i in range(stOpravil):
-                        urnik2.add_field(
-                            name=data['tasks'][i],
-                            value=f"**```{data['times'][i]}```**",
-                            inline=False,
-                        )
+                   
                     
                     urnik2.set_thumbnail(url=f"https://www.weatherbit.io/static/img/icons/{w['data'][0]['weather']['icon']}.png")
                 else:
@@ -91,14 +85,19 @@ class dailyCog(commands.Cog, name="ping command"):
                         value="Ni podatka",
                         inline=False,
                     )
-
-                    for i in range(stOpravil):
-                        urnik2.add_field(
-                            name=data['tasks'][i],
-                            value=f"**```{data['times'][i]}```**",
-                            inline=False,
-                        )
-
+                opt = ''
+                for task in data["tasks"]:
+                    if task['description'] == '':
+                        opt += f"**{task['startTime']}**  {task['title']}\n"
+                    else:
+                        opt += f"**{task['startTime']}**  {task['title']}\n\t_{task['description']}_\n"
+                
+                urnik2.add_field(
+                    name="Opis",
+                    value=opt,
+                    inline=False,
+                )
+    
                 await channel.send(embed=urnik2)
 
 
