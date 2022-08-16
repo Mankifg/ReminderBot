@@ -9,7 +9,7 @@ import asyncio
 import requests
 import os
 
-TIMER = 1
+TIMER = 30
 
 def read():
     with open('./data/schedule.json', 'r') as f:

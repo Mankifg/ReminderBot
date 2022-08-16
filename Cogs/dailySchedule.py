@@ -14,7 +14,6 @@ load_dotenv()
 url = "https://weatherbit-v1-mashape.p.rapidapi.com/current"
 
 loc = os.getenv('WEATHER')
-TIME = "10:08"
 
 dnevi = ["ponedeljek", "torek", "sreda", "četrtek", "petek", "sobota", "nedelja"]
 
@@ -53,53 +52,51 @@ class dailyCog(commands.Cog, name="ping command"):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        while True:
-            await asyncio.sleep(10)
             data = read()
 
-            if True or TIME == datetime.datetime.now().strftime("%H:%M"):
-                channel = self.bot.get_channel(int(open('data/channel.txt', 'r').read()))
-                await channel.send('@everyone')
+            
+            channel = self.bot.get_channel(int(open('data/channel.txt', 'r').read()))
+            await channel.send('@everyone')
 
-                stOpravil = len(data["tasks"])
+            stOpravil = len(data["tasks"])
 
-                urnik2 = discord.Embed(
-                    title=f"Urnik {datetime.datetime.now().strftime('%d.%m.%Y %H:%M')} - **{dnevi[datetime.datetime.today().weekday()]}**",
-                    description="",
-                    color=discord.Color.dark_blue(),
+            urnik2 = discord.Embed(
+                title=f"Urnik {datetime.datetime.now().strftime('%d.%m.%Y %H:%M')} - **{dnevi[datetime.datetime.today().weekday()]}**",
+                description="",
+                color=discord.Color.dark_blue(),
+            )
+            w,lat,lon = weather()
+            if not lat == 0 and not lon == 0:
+
+                urnik2.add_field(
+                    name="Temperatura",
+                    value=f"{w['data'][0]['temp']}°C",
+                    inline=False,
                 )
-                w,lat,lon = weather()
-                if not lat == 0 and not lon == 0:
 
+                for i in range(stOpravil):
                     urnik2.add_field(
-                        name="Temperatura",
-                        value=f"{w['data'][0]['temp']}°C",
+                        name=data['tasks'][i],
+                        value=f"**```{data['times'][i]}```**",
+                        inline=False,
+                    )
+                
+                urnik2.set_thumbnail(url=f"https://www.weatherbit.io/static/img/icons/{w['data'][0]['weather']['icon']}.png")
+            else:
+                urnik2.add_field(
+                    name="Temperatura",
+                    value="Ni podatka",
+                    inline=False,
+                )
+
+                for i in range(stOpravil):
+                    urnik2.add_field(
+                        name=data['tasks'][i],
+                        value=f"**```{data['times'][i]}```**",
                         inline=False,
                     )
 
-                    for i in range(stOpravil):
-                        urnik2.add_field(
-                            name=data['tasks'][i],
-                            value=f"**```{data['times'][i]}```**",
-                            inline=False,
-                        )
-                    
-                    urnik2.set_thumbnail(url=f"https://www.weatherbit.io/static/img/icons/{w['data'][0]['weather']['icon']}.png")
-                else:
-                    urnik2.add_field(
-                        name="Temperatura",
-                        value="Ni podatka",
-                        inline=False,
-                    )
-
-                    for i in range(stOpravil):
-                        urnik2.add_field(
-                            name=data['tasks'][i],
-                            value=f"**```{data['times'][i]}```**",
-                            inline=False,
-                        )
-
-                await channel.send(embed=urnik2)
+            await channel.send(embed=urnik2)
 
 
 def setup(bot: commands.Bot):
