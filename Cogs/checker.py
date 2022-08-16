@@ -32,17 +32,18 @@ class dailyCog(commands.Cog, name="ping command"):
                 curr_time_task = data["tasks"][i]["startTime"]
                 curr_date_rl = datetime.datetime.now().strftime("%d.%m.%Y")
                 curr_date_task = data["tasks"][i]["date"]
-                print(f"{curr_time_rl=}\n{curr_time_task=}\n{curr_date_rl=}\n{curr_date_task=}\n")
+
                 if curr_date_rl == curr_date_task:
-                    print("good date")
+                    
                     if curr_time_rl == curr_time_task:
-                        print("good time") 
+                         
                         q = discord.Embed(
                             title=data["tasks"][i]["title"],
                             description=data["tasks"][i]["description"],
                             color=discord.Color.blue()
-                    )
-                    await channel.send(embed=q)
+                            )
+                        await channel.send("@everyone")
+                        await channel.send(embed=q)
 
                     for x in range(len(delay)):
                         rem_time = curr_time_task.split(":")
@@ -58,8 +59,9 @@ class dailyCog(commands.Cog, name="ping command"):
                                 channel = f.read()
                             channel = int(channel)
                             channel = self.bot.get_channel(channel)
+                            await channel.send("@everyone")
                             q = discord.Embed(
-                                title=f'In **{delay[x]}**:{data["tasks"][i]["title"]}',
+                                title=f'In **{delay[x]}**: {data["tasks"][i]["title"]}',
                                 description=data["tasks"][i]["description"],
                                 color=discord.Color.blue()
                             )
