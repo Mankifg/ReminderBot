@@ -1,5 +1,6 @@
 from ast import alias
 from calendar import WEDNESDAY
+from types import NoneType
 import discord
 from discord.ext import commands, tasks
 from itertools import cycle
@@ -75,12 +76,7 @@ class dailyCog(commands.Cog, name="ping command"):
                         inline=False,
                     )
 
-                    for task in data["tasks"]:
-                        urnik2.add_field(
-                            name=f"**{task['startTime']}**  {task['title']}",
-                            value=f"ㅤ_{task['description']}_",
-                            inline=False,
-                        )
+                   
                     
                     urnik2.set_thumbnail(url=f"https://www.weatherbit.io/static/img/icons/{w['data'][0]['weather']['icon']}.png")
                 else:
@@ -89,14 +85,19 @@ class dailyCog(commands.Cog, name="ping command"):
                         value="Ni podatka",
                         inline=False,
                     )
-
-                    for task in data["tasks"]:
-                        urnik2.add_field(
-                            name=f"**{task['startTime']}**  {task['title']}",
-                            value=f"ㅤ_{task['description']}_",
-                            inline=False,
-                        )
-
+                opt = ''
+                for task in data["tasks"]:
+                    if task['description'] == '':
+                        opt += f"**{task['startTime']}**  {task['title']}\n"
+                    else:
+                        opt += f"**{task['startTime']}**  {task['title']}\n\t_{task['description']}_\n"
+                
+                urnik2.add_field(
+                    name="Opis",
+                    value=opt,
+                    inline=False,
+                )
+    
                 await channel.send(embed=urnik2)
 
 
