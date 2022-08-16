@@ -61,6 +61,10 @@ class dailyCog(commands.Cog, name="ping command"):
                 channel = self.bot.get_channel(int(open('data/channel.txt', 'r').read()))
                 await channel.send('@everyone')
 
+
+                stOpravil = len(data["tasks"])
+
+
                 urnik2 = discord.Embed(
                     title=f"Urnik {datetime.datetime.now().strftime('%d.%m.%Y %H:%M')} - **{dnevi[datetime.datetime.today().weekday()]}**",
                     description="",
@@ -75,10 +79,13 @@ class dailyCog(commands.Cog, name="ping command"):
                         inline=False,
                     )
 
-                    for task in data["tasks"]:
+
+                    for i in range(stOpravil):
                         urnik2.add_field(
-                            name=f"**{task['startTime']}**  {task['title']}",
-                            value=f"ㅤ_{task['description']}_",
+                            name=data['tasks'][i],
+                            value=f"**```{data['times'][i]}```**",
+
+
                             inline=False,
                         )
                     
@@ -90,10 +97,11 @@ class dailyCog(commands.Cog, name="ping command"):
                         inline=False,
                     )
 
-                    for task in data["tasks"]:
+                    for i in range(stOpravil):
                         urnik2.add_field(
-                            name=f"**{task['startTime']}**  {task['title']}",
-                            value=f"ㅤ_{task['description']}_",
+                            name=data['tasks'][i],
+                            value=f"**```{data['times'][i]}```**",
+
                             inline=False,
                         )
 

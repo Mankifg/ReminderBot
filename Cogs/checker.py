@@ -9,6 +9,12 @@ import asyncio
 import requests, os
 from dotenv import load_dotenv
 
+
+import requests
+import os
+
+TIMER = 1
+
 load_dotenv()
 
 url = "https://weatherbit-v1-mashape.p.rapidapi.com/current"
@@ -43,6 +49,7 @@ def weather():
     return response,lat,lon
    
 
+
 def read():
     with open('./data/schedule.json', 'r') as f:
         return json.load(f)
@@ -61,6 +68,24 @@ class dailyCog(commands.Cog, name="ping command"):
                 channel = self.bot.get_channel(int(open('data/channel.txt', 'r').read()))
                 await channel.send('@everyone')
 
+
+                if data['times'][i] == datetime.datetime.now().strftime("%H:%M"):
+                    channel = self.bot.get_channel(int(open('data/channel.txt', 'r').read()))
+                    await channel.send('@everyone')
+                    q = discord.Embed(
+                        title=f"Event: **{data['tasks'][i]}**",
+                        description=f"Event time: {data['times'][i]}",
+                        color=discord.Color.dark_blue(),
+                    )
+
+                    await channel.send(embed=q)
+
+                    break
+
+                fut_time =  data["times"][i]
+                fut_h = int(fut_time.split(":")[0])
+                fut_m = int(fut_time.split(":")[1])
+
                 urnik2 = discord.Embed(
                     title=f"Urnik {datetime.datetime.now().strftime('%d.%m.%Y %H:%M')} - **{dnevi[datetime.datetime.today().weekday()]}**",
                     description="",
@@ -68,7 +93,22 @@ class dailyCog(commands.Cog, name="ping command"):
                 )
                 w,lat,lon = weather()
 
+
                 if not lat == 0 and not lon == 0:
+
+                if fut_time[-2] == ":":
+                    fut_time = fut_time + "0"   
+                
+                now = datetime.datetime.now()
+                a = [now.hour, now.minute]
+                b = [fut_h, fut_m]
+                if a == b:
+                    channel = self.bot.get_channel(int(open('data/channel.txt', 'r').read()))
+                    await channel.send('@everyone')
+                    q = discord.Embed(
+                        title=f"Event **{data['tasks'][i]}** in 30 minutes",
+                        description=f"Event time: {data['times'][i]}",
+                        color=discord.Color.dark_blue(),
 
                     urnik2.add_field(
                         name="Temperatura",
@@ -81,6 +121,7 @@ class dailyCog(commands.Cog, name="ping command"):
                         name="Temperatura",
                         value="Ni podatka",
                         inline=False,
+
                     )
 
                 for task in data["tasks"]:
