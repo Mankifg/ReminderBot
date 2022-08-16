@@ -7,41 +7,10 @@ import datetime
 import json
 import asyncio
 import requests, os
-from dotenv import load_dotenv
-
-load_dotenv()
-
-url = "https://weatherbit-v1-mashape.p.rapidapi.com/current"
-
-loc = os.getenv('WEATHER')
-TIME = "8:00"
 
 dnevi = ["ponedeljek", "torek", "sreda", "četrtek", "petek", "sobota", "nedelja"]
 
-def weather():
-    with open('./data/settings.json', 'r') as f:
-        settings = json.load(f)
-    
-    location = settings['place']
-
-    resp = requests.get(f"http://api.openweathermap.org/geo/1.0/direct?q={location}&limit=1&appid={loc}").json()
-    try:
-        lat = resp[0]['lat']
-        lon = resp[0]['lon']
-    except:
-        lat = 0
-        lon = 0
-
-    querystring = {"lon":lon,"lat":lat}
-
-    headers = {
-        "X-RapidAPI-Key": os.getenv('RAPIDKEY'),
-        "X-RapidAPI-Host": "weatherbit-v1-mashape.p.rapidapi.com"
-    }
-
-    response = requests.request("GET", url, headers=headers, params=querystring).json()
-    return response,lat,lon
-   
+delay = [30]
 
 def read():
     with open('./data/schedule.json', 'r') as f:
@@ -56,41 +25,48 @@ class dailyCog(commands.Cog, name="ping command"):
         while True:
             await asyncio.sleep(10)
             data = read()
+            channel = self.bot.get_channel(int(open('data/channel.txt', 'r').read()))
 
-            if True or (datetime.datetime.now().strftime('%02d-%02m-%Y') and TIME == datetime.datetime.now().strftime("%H:%M")):
-                channel = self.bot.get_channel(int(open('data/channel.txt', 'r').read()))
-                await channel.send('@everyone')
-
-                urnik2 = discord.Embed(
-                    title=f"Urnik {datetime.datetime.now().strftime('%d.%m.%Y %H:%M')} - **{dnevi[datetime.datetime.today().weekday()]}**",
-                    description="",
-                    color=discord.Color.dark_blue(),
-                )
-                w,lat,lon = weather()
-
-                if not lat == 0 and not lon == 0:
-
-                    urnik2.add_field(
-                        name="Temperatura",
-                        value=f"{w['data'][0]['temp']}°C",
-                        inline=False,
+            for i in range(len(data['tasks'])):
+                curr_time_rl = datetime.datetime.now().strftime("%H:%M")
+                curr_time_task = data["tasks"][i]["startTime"]
+                curr_date_rl = datetime.datetime.now().strftime("%d.%m.%Y")
+                curr_date_task = data["tasks"][i]["date"]
+                print(f"{curr_time_rl=}\n{curr_time_task=}\n{curr_date_rl=}\n{curr_date_task=}\n")
+                if curr_date_rl == curr_date_task:
+                    print("good date")
+                    if curr_time_rl == curr_time_task:
+                        print("good time") 
+                        q = discord.Embed(
+                            title=data["tasks"][i]["title"],
+                            description=data["tasks"][i]["description"],
+                            color=discord.Color.blue()
                     )
-                
-                else:
-                    urnik2.add_field(
-                        name="Temperatura",
-                        value="Ni podatka",
-                        inline=False,
-                    )
+                    await channel.send(embed=q)
 
-                for task in data["tasks"]:
-                        urnik2.add_field(
-                            name=f"**{task['startTime']}**  {task['title']}",
-                            value=f"ㅤ_{task['description']}_",
-                            inline=False,
-                        )
-                await channel.send(embed=urnik2)
+                    for x in range(len(delay)):
+                        rem_time = curr_time_task.split(":")
+                        rem_h = int(rem_time[0])
+                        rem_m = int(rem_time[1])
+                        rem_m = rem_m - delay[x]
+                        if rem_m < 0:
+                            rem_h = rem_h - 1
+                            rem_m = rem_m + 60
+                        print('{}:{}'.format(rem_h, rem_m))
+                        if curr_date_rl == curr_date_task and rem_h == datetime.datetime.now().hour and rem_m == datetime.datetime.now().minute:
+                            with open("./data/channel.txt", "r") as f:
+                                channel = f.read()
+                            channel = int(channel)
+                            channel = self.bot.get_channel(channel)
+                            q = discord.Embed(
+                                title=f'In **{delay[x]}**:{data["tasks"][i]["title"]}',
+                                description=data["tasks"][i]["description"],
+                                color=discord.Color.blue()
+                            )
+                            await channel.send(embed=q)
+                            
 
+                    
 
 def setup(bot: commands.Bot):
     bot.add_cog(dailyCog(bot))

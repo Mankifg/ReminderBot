@@ -1,12 +1,15 @@
 import discord
 from discord.ext import commands
 import json
+import datetime
 
-def preberiUrnik():
+def read():
     with open('./data/schedule.json', 'r') as f:
         data = json.load(f)
     
     return data
+
+dnevi = ["ponedeljek", "torek", "sreda", "četrtek", "petek", "sobota", "nedelja"]
 
 class izpisUrnikaCog(commands.Cog, name="izpisUrnika"):
     def __init__(self, bot: commands.bot):
@@ -15,26 +18,21 @@ class izpisUrnikaCog(commands.Cog, name="izpisUrnika"):
     @commands.command(name="schedule", usage="", description="Give you schedule fot the day", aliases=['s'])
     @commands.cooldown(1, 2, commands.BucketType.member)
     async def schedule(self, ctx):
-
-        urnik = preberiUrnik()
-        
-        stOpravil = len(urnik["tasks"])
-
+        data = read()
         urnik2 = discord.Embed(
-            title="Urnik",
+            title=f"Urnik {datetime.datetime.now().strftime('%d.%m.%Y %H:%M')} - **{dnevi[datetime.datetime.today().weekday()]}**",
             description="",
-            color=discord.Color.dark_blue(),
+            color=discord.Color.dark_blue())
+        
+        for task in data["tasks"]:
+            urnik2.add_field(
+                name=f"**{task['startTime']}**  {task['title']}",
+                value=f"_ㅤ{task['description']}_",
+                inline=False,
         )
         
-        for i in range(stOpravil):
-            urnik2.add_field(
-                name=urnik['tasks'][i],
-                value=f"**```{urnik['times'][i]}```**",
-                inline=True,
-            )
-
-        urnik2.set_author(name="Mentorji")
         await ctx.send(embed=urnik2)
+    
         
 def setup(bot: commands.Bot):
     bot.add_cog(izpisUrnikaCog(bot))

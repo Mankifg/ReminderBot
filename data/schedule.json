@@ -1,26 +1,26 @@
 {
     "tasks": [
         {
-            "date": "2020-01-01",
+            "date": "16.8.2022",
             "startTime": "9:00",
             "title": "Delavnice",
             "description": ""
         },
         {
-            "date": "2020-01-01",
+            "date": "16.8.2022",
             "startTime": "10:00",
             "title": "Malica",
-            "description": ""
+            "description": "jabolko"
         },
         {
-            "date": "2020-01-01",
-            "startTime": "10:10",
+            "date": "16.8.2022",
+            "startTime": "14:42",
             "title": "Malica",
-            "description": ""
+            "description": "banana"
         },
         {
-            "date": "2020-01-01",
-            "startTime": "12:30",
+            "date": "16.8.2022",
+            "startTime": "15:20",
             "title": "Kosilo",
             "description": ""
         }
