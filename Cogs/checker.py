@@ -1,86 +1,96 @@
-from threading import Timer
+from ast import alias
+from calendar import WEDNESDAY
 import discord
 from discord.ext import commands, tasks
 from itertools import cycle
 import datetime
 import json
 import asyncio
+import requests, os
+from dotenv import load_dotenv
 
-import requests
-import os
+load_dotenv()
 
-TIMER = 1
+url = "https://weatherbit-v1-mashape.p.rapidapi.com/current"
+
+loc = os.getenv('WEATHER')
+TIME = "8:00"
+
+dnevi = ["ponedeljek", "torek", "sreda", "četrtek", "petek", "sobota", "nedelja"]
+
+def weather():
+    with open('./data/settings.json', 'r') as f:
+        settings = json.load(f)
+    
+    location = settings['place']
+
+    resp = requests.get(f"http://api.openweathermap.org/geo/1.0/direct?q={location}&limit=1&appid={loc}").json()
+    try:
+        lat = resp[0]['lat']
+        lon = resp[0]['lon']
+    except:
+        lat = 0
+        lon = 0
+
+    querystring = {"lon":lon,"lat":lat}
+
+    headers = {
+        "X-RapidAPI-Key": os.getenv('RAPIDKEY'),
+        "X-RapidAPI-Host": "weatherbit-v1-mashape.p.rapidapi.com"
+    }
+
+    response = requests.request("GET", url, headers=headers, params=querystring).json()
+    return response,lat,lon
+   
 
 def read():
     with open('./data/schedule.json', 'r') as f:
         return json.load(f)
 
-
-class tasksCog(commands.Cog, name="ping command"):
+class dailyCog(commands.Cog, name="ping command"):
     def __init__(self, bot: commands.bot):
         self.bot = bot
-  
-    @commands.command(name="setchannel", usage="", description="Sets channel for preset events.", aliases=['sc'])
-    @commands.has_permissions(administrator=True)
-    async def setchannel(self, ctx, channel: discord.TextChannel):
-        with open('data/channel.txt',"w") as f:
-            f.write(str(channel.id))
-        await ctx.send(f"Channel set to {channel.mention}")
 
     @commands.Cog.listener()
     async def on_ready(self):
         while True:
-            await asyncio.sleep(TIMER)
+            await asyncio.sleep(10)
             data = read()
- 
 
-            for i in range(len(data['times'])):
+            if True or (datetime.datetime.now().strftime('%02d-%02m-%Y') and TIME == datetime.datetime.now().strftime("%H:%M")):
+                channel = self.bot.get_channel(int(open('data/channel.txt', 'r').read()))
+                await channel.send('@everyone')
 
-                if data['times'][i] == datetime.datetime.now().strftime("%H:%M"):
-                    channel = self.bot.get_channel(int(open('data/channel.txt', 'r').read()))
-                    await channel.send('@everyone')
-                    q = discord.Embed(
-                        title=f"Event: **{data['tasks'][i]}**",
-                        description=f"Event time: {data['times'][i]}",
-                        color=discord.Color.dark_blue(),
+                urnik2 = discord.Embed(
+                    title=f"Urnik {datetime.datetime.now().strftime('%d.%m.%Y %H:%M')} - **{dnevi[datetime.datetime.today().weekday()]}**",
+                    description="",
+                    color=discord.Color.dark_blue(),
+                )
+                w,lat,lon = weather()
+
+                if not lat == 0 and not lon == 0:
+
+                    urnik2.add_field(
+                        name="Temperatura",
+                        value=f"{w['data'][0]['temp']}°C",
+                        inline=False,
+                    )
+                
+                else:
+                    urnik2.add_field(
+                        name="Temperatura",
+                        value="Ni podatka",
+                        inline=False,
                     )
 
-                    await channel.send(embed=q)
+                for task in data["tasks"]:
+                        urnik2.add_field(
+                            name=f"**{task['startTime']}**  {task['title']}",
+                            value=f"ㅤ_{task['description']}_",
+                            inline=False,
+                        )
+                await channel.send(embed=urnik2)
 
-                    break
-
-                fut_time =  data["times"][i]
-                fut_h = int(fut_time.split(":")[0])
-                fut_m = int(fut_time.split(":")[1])
-
-                fut_m = fut_m - 30
-                if fut_m < 0:
-                    fut_m = fut_m + 60
-                    fut_h = fut_h - 1
-
-                fut_time = str(fut_h) + ":" + str(fut_m)
-                
-
-                if fut_time[-2] == ":":
-                    fut_time = fut_time + "0"   
-                
-                now = datetime.datetime.now()
-                a = [now.hour, now.minute]
-                b = [fut_h, fut_m]
-                if a == b:
-                    channel = self.bot.get_channel(int(open('data/channel.txt', 'r').read()))
-                    await channel.send('@everyone')
-                    q = discord.Embed(
-                        title=f"Event **{data['tasks'][i]}** in 30 minutes",
-                        description=f"Event time: {data['times'][i]}",
-                        color=discord.Color.dark_blue(),
-                    )
-                    
-                    await channel.send(embed=q)
-
-                    break
-    
 
 def setup(bot: commands.Bot):
-    bot.add_cog(tasksCog(bot))
-
+    bot.add_cog(dailyCog(bot))

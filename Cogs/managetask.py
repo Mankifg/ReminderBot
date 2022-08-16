@@ -1,3 +1,4 @@
+from calendar import month
 import discord
 from discord.ext import commands
 import json
@@ -12,31 +13,31 @@ def write(data):
     with open('./data/schedule.json', 'w') as f:
         json.dump(data, f)
 
-def addSorted(data, task, time):
+def addSorted(data, task, time, date):
     novaUra, noveMin = time.split(":")
     novaUra = int(novaUra)
     noveMin = int(noveMin)
-
-    d = len(data['times'])
+    novMon, novDay, novYear = date.split("-")
+    novMon = int(novMon)
+    novDay = int(novDay)
+    novYear = int(novYear)
+    novCas = (novYear * 365 * 24 * 60) + (novDay * 24 * 60) + (novaUra * 60) + noveMin
+    d = len(data['tasks'])
     for i in range(d):
-        ure, min = data['times'][i].split(":")
+        ure, min = data['tasks']['startTime'].split(":")
         ure = int(ure)
         min = int(min)
-        if (novaUra * 60 + noveMin < ure * 60 + min):
-            data['times'].insert(i, time)
-            data['tasks'].insert(i, task)
+        mon, day, year = data['tasks']['date'].split("-")
+        mon = int(mon)
+        day = int(day)
+        year = int(year)
+        trCas = (year * 365 * 24 * 60) + (day * 24 * 60) + (ure * 60) + min
+        if (novCas < trCas):
+            data['tasks'].insert(i, {"date":date, "startTime":time, "title":task, "description":"add"})
             return
     
-    ure, min = data['times'][d-1].split(":")
-    ure = int(ure)
-    min = int(min)
-
-    
-    data['times'].insert(d, time)
-    data['tasks'].insert(d, task)
-    
+    data['tasks'].insert(i, {"date":date, "startTime":time, "title":task, "description":"add"})
     return
-                
 
 class addtaskCog(commands.Cog, name="ping command"):
     def __init__(self, bot: commands.bot):
@@ -45,12 +46,13 @@ class addtaskCog(commands.Cog, name="ping command"):
     @commands.command(name="addtask", usage=" [time] [task]", description="Adds task to everyday routine.", aliases=['at'])
     @commands.cooldown(1, 2, commands.BucketType.member)
     async def addtask(self, ctx, time,*, task):
-        if not len(time) == 5 or not time[2] == ":" or not time[0:2].isdigit() or not time[3:5].isdigit():
-            await ctx.send("Time must be in format HH:MM")
+        if len(time) != 16 or not time[2] == ":" or not time[0:2].isdigit() or not time[3:5].isdigit():
+            await ctx.send("Time must be in format YYYY-MM-DD HH:MM")
             return
         
         data = read()
-        addSorted(data,task,time)
+        time, date = time.split()
+        addSorted(data, task, time, date)
         write(data)
         await ctx.send("Task added.")
 
@@ -58,19 +60,14 @@ class addtaskCog(commands.Cog, name="ping command"):
     @commands.cooldown(1, 2, commands.BucketType.member)
     async def removetask(self, ctx, task):
         data = read()
-        try:
-            time = data['times'][data['tasks'].index(task)]
-        except:
-            await ctx.send("Task not found.")
-            return
 
-        data['tasks'].remove(task)
-        data['times'].remove(time)
+        d = len(data["tasks"])
+        for i in range(d):
+            if (data["tasks"][i]["title"] == task):
+                del data["tasks"][i]
+
         write(data)
-        await ctx.send("Task removed.")
+        await ctx.send("Task removed.")        
 
-
-        
-        
 def setup(bot: commands.Bot):
     bot.add_cog(addtaskCog(bot))
