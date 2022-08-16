@@ -6,8 +6,18 @@ import datetime
 import json
 import asyncio
 
-TIMER = 1
+import requests
+import os
 
+API_KEY = "989d3a1bf06f8f16d9d12e543aec324f"
+
+
+
+
+
+
+
+TIMER = 1
 def read():
     with open('./data/schedule.json', 'r') as f:
         return json.load(f)
@@ -41,13 +51,12 @@ class tasksCog(commands.Cog, name="ping command"):
                         description=f"Event time: {data['times'][i]}",
                         color=discord.Color.dark_blue(),
                     )
-                    
+
                     await channel.send(embed=q)
 
                     break
 
                 fut_time =  data["times"][i]
-                print(f"raw {fut_time}")
                 fut_h = int(fut_time.split(":")[0])
                 fut_m = int(fut_time.split(":")[1])
 
@@ -60,16 +69,12 @@ class tasksCog(commands.Cog, name="ping command"):
                 
 
                 if fut_time[-2] == ":":
-                    fut_time = fut_time + "0"
-                print(fut_time)   
+                    fut_time = fut_time + "0"   
                 
                 now = datetime.datetime.now()
                 a = [now.hour, now.minute]
                 b = [fut_h, fut_m]
                 if a == b:
-
-                    print('half a hour')
-
                     channel = self.bot.get_channel(int(open('data/channel.txt', 'r').read()))
                     await channel.send('@everyone')
                     q = discord.Embed(

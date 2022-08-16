@@ -1,1 +1,28 @@
-{"tasks": ["zajtrk", "malica", "kosilo", "abb", "aa", "abc", "help", "aaa", "aaaaa"], "times": ["9:00", "10:00", "12:30", "18:21", "18:25", "18:27", "18:32", "18:36", "19:27"]}
+{
+    "tasks": [
+        {
+            "date": "2020-01-01",
+            "startTime": "9:00",
+            "title": "Delavnice",
+            "description": ""
+        },
+        {
+            "date": "2020-01-01",
+            "startTime": "10:00",
+            "title": "Malica",
+            "description": ""
+        },
+        {
+            "date": "2020-01-01",
+            "startTime": "10:10",
+            "title": "Malica",
+            "description": ""
+        },
+        {
+            "date": "2020-01-01",
+            "startTime": "12:30",
+            "title": "Kosilo",
+            "description": ""
+        }
+    ]
+}
