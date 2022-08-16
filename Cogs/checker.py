@@ -33,15 +33,15 @@ class tasksCog(commands.Cog, name="ping command"):
             await asyncio.sleep(TIMER)
             data = read()
  
+            d = len(data['tasks'])
+            for i in range(d):
 
-            for i in range(len(data['times'])):
-
-                if data['times'][i] == datetime.datetime.now().strftime("%H:%M"):
+                if data['tasks']['date'] == datetime.datetime.now().strftime("%H:%M") and data['tasks']['startTime'] == datetime.datetime.now().strftime("%H:%M") :
                     channel = self.bot.get_channel(int(open('data/channel.txt', 'r').read()))
                     await channel.send('@everyone')
                     q = discord.Embed(
-                        title=f"Event: **{data['tasks'][i]}**",
-                        description=f"Event time: {data['times'][i]}",
+                        title=f"Event: **{data['tasks']['startTime']}**",
+                        description=f"Event time: {data['times']['title']}",
                         color=discord.Color.dark_blue(),
                     )
 
