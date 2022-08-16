@@ -4,10 +4,12 @@ It will remind you
 # .ENV structure
 ```
 TOKEN=[Discord bot token]
-WEATHER=[]
-RAPIDKEY=[]
+WEATHER=[OpenWeatherMap Key]
+RAPIDKEY=[Rapid api key]
 ```
-Discord bot token - obtained on Discord Dev Portal [Here](https://discord.com/developers/applications)
+Discord bot token - [Discord Dev Portal](https://discord.com/developers/applications)
+OpenWeatherMap Key - [Here](https://home.openweathermap.org/users/sign_up)
+Rapid api key - By creating account [Here](https://rapidapi.com/auth/sign-up?referral=/weatherbit/api/weather) and subscribing to [Here](https://rapidapi.com/weatherbit/api/weather)
 
 # Commands
 List of command can be acccesed from typing **m!help**. It will show every command:
