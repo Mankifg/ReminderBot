@@ -9,15 +9,8 @@ import asyncio
 import requests
 import os
 
-API_KEY = "989d3a1bf06f8f16d9d12e543aec324f"
-
-
-
-
-
-
-
 TIMER = 1
+
 def read():
     with open('./data/schedule.json', 'r') as f:
         return json.load(f)
