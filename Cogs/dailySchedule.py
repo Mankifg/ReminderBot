@@ -8,7 +8,12 @@ load_dotenv()
 url = "https://weatherbit-v1-mashape.p.rapidapi.com/current"
 
 loc = os.getenv("WEATHER")
-TIME = "10:08"
+
+with open('data/settings.json',"r") as f:
+    settings = json.load(f)
+
+TIME = settings["time"]
+ch = settings["channel"]
 
 dnevi = ["ponedeljek", "torek", "sreda", "četrtek", "petek", "sobota", "nedelja"]
 
@@ -55,10 +60,9 @@ class dailyCog(commands.Cog, name="ping command"):
             await asyncio.sleep(10)
             data = read()
 
-            if True or TIME == datetime.datetime.now().strftime("%H:%M"):
-                channel = self.bot.get_channel(
-                    int(open("data/channel.txt", "r").read())
-                )
+            if TIME == datetime.datetime.now().strftime("%H:%M"):
+                channel = self.bot.get_channel(ch)
+                
                 await channel.send("@everyone")
 
                 urnik2 = discord.Embed(
@@ -98,7 +102,6 @@ class dailyCog(commands.Cog, name="ping command"):
                 )
 
                 await channel.send(embed=urnik2)
-
 
 def setup(bot: commands.Bot):
     bot.add_cog(dailyCog(bot))

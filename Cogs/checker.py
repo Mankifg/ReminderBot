@@ -10,13 +10,14 @@ import requests, os
 
 dnevi = ["ponedeljek", "torek", "sreda", "četrtek", "petek", "sobota", "nedelja"]
 
-delay = [30]
-
-
 def read():
     with open("./data/schedule.json", "r") as f:
         return json.load(f)
 
+with open("data/settings.json", "r") as f:
+    settings = json.load(f)
+ch = settings["channel"]
+delay = settings["delay"]
 
 class dailyCog(commands.Cog, name="ping command"):
     def __init__(self, bot: commands.bot):
@@ -27,7 +28,7 @@ class dailyCog(commands.Cog, name="ping command"):
         while True:
             await asyncio.sleep(10)
             data = read()
-            channel = self.bot.get_channel(int(open("data/channel.txt", "r").read()))
+            channel = self.bot.get_channel(ch)
 
             for i in range(len(data["tasks"])):
                 curr_time_rl = datetime.datetime.now().strftime("%H:%M")

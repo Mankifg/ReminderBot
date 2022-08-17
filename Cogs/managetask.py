@@ -13,6 +13,9 @@ def write(data):
     with open("./data/schedule.json", "w") as f:
         json.dump(data, f)
 
+with open("./data/settings.json", "r") as f:
+    settings = json.load(f)
+adminrole = settings["adminrole"]
 
 def addSorted(data, task, time, date):
     novaUra, noveMin = time.split(":")
@@ -57,6 +60,7 @@ class addtaskCog(commands.Cog, name="ping command"):
         aliases=["at"],
     )
     @commands.cooldown(1, 2, commands.BucketType.member)
+    @commands.has_role(adminrole)
     async def addtask(self, ctx, time, *, task):
         if (
             len(time) != 16
@@ -64,11 +68,14 @@ class addtaskCog(commands.Cog, name="ping command"):
             or not time[0:2].isdigit()
             or not time[3:5].isdigit()
         ):
-            await ctx.send("Time must be in format YYYY-MM-DD HH:MM")
+            await ctx.send('Time must be in format "MM:HH-DD.MM.YYYY"')
             return
 
         data = read()
-        time, date = time.split()
+        time, date = time.split("-")
+
+
+
         addSorted(data, task, time, date)
         write(data)
         await ctx.send("Task added.")
@@ -80,14 +87,14 @@ class addtaskCog(commands.Cog, name="ping command"):
         aliases=["rt"],
     )
     @commands.cooldown(1, 2, commands.BucketType.member)
+    @commands.has_role(adminrole)
     async def removetask(self, ctx, task):
         data = read()
 
         d = len(data["tasks"])
         for i in range(d):
             if data["tasks"][i]["title"] == task:
-                del data["tasks"][i]
-
+                data["tasks"][i] = []
         write(data)
         await ctx.send("Task removed.")
 
