@@ -1,1 +1,9 @@
-{"place":"GORENJI RADENCI"}
+{
+    "place":"GORENJI RADENCI",
+    "time":"08:00",
+    "channel":1008649622673170485,
+    "adminrole":1008668976890515477,
+    "delay": [
+        30,5
+    ]
+}
