@@ -8,14 +8,19 @@ class ReminderCog(commands.Cog, name="ping command"):
     def __init__(self, bot: commands.bot):
         self.bot = bot
 
-    @commands.command(name="remind", usage="[x[s,m,h,d,w]] / [hh:mm] [msg]", description="It will remind you with preset message.", aliases=['r'],)
+    @commands.command(
+        name="remind",
+        usage="[x[s,m,h,d,w]] / [hh:mm] [msg]",
+        description="It will remind you with preset message.",
+        aliases=["r"],
+    )
     @commands.cooldown(1, 2, commands.BucketType.member)
-    async def remind(self, ctx, t, *, message='Reminder!'):
-        valid_ends = ['s', 'm', 'h', 'd',"w"]
+    async def remind(self, ctx, t, *, message="Reminder!"):
+        valid_ends = ["s", "m", "h", "d", "w"]
         dict = {"s": 1, "m": 60, "h": 3600, "d": 86400, "w": 604800}
 
         now = datetime.now()
-        
+
         if t[-1] not in valid_ends:
             if ":" in t:
                 tf = t.split(":")
@@ -38,7 +43,7 @@ class ReminderCog(commands.Cog, name="ping command"):
 
                 tr = now.timestamp() + time_sec
 
-                #print(tf, hour_diff, minutes_diff, time_sec, tr)
+                # print(tf, hour_diff, minutes_diff, time_sec, tr)
 
                 await ctx.message.delete()
                 remind = await ctx.send(f"Set Reminder to {t}. <t:{int(tr)}:R>")
@@ -52,7 +57,9 @@ class ReminderCog(commands.Cog, name="ping command"):
             await ctx.message.delete()
             time = int(t[:-1]) * dict[t[-1]]
             tr = now.timestamp() + time
-            remind = await ctx.send(f"Reminder set for {time} seconds in <t:{int(tr)}:R>")
+            remind = await ctx.send(
+                f"Reminder set for {time} seconds in <t:{int(tr)}:R>"
+            )
             await asyncio.sleep(time)
             await remind.delete()
             await ctx.send(ctx.author.mention)
