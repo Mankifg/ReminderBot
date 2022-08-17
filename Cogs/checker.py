@@ -4,6 +4,7 @@ import discord
 from discord.ext import commands
 from datetime import datetime
 import asyncio
+import json
 
 from helpers import read
 
@@ -11,6 +12,9 @@ dnevi = ["ponedeljek", "torek", "sreda", "četrtek", "petek", "sobota", "nedelja
 
 delay = [30]
 
+with open('data/settings.json',"r") as f:
+    settings = json.load(f)
+channel = settings["channel"]
 
 class DailyCog(commands.Cog, name="ping command"):
     def __init__(self, bot: commands.bot):
@@ -18,7 +22,7 @@ class DailyCog(commands.Cog, name="ping command"):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        channel = self.bot.get_channel(int(os.environ.get("DISCORD_CHANNEL")))
+        ch = self.bot.get_channel(channel)
 
         while True:
             await asyncio.sleep(10)
@@ -49,7 +53,7 @@ class DailyCog(commands.Cog, name="ping command"):
                             description=data["tasks"][i]["description"],
                             color=discord.Color.blue()
                         )
-                        await channel.send(embed=q)
+                        await ch.send(embed=q)
                         await asyncio.sleep(30)
 
 
