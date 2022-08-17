@@ -1,8 +1,5 @@
-import discord
+import discord, json, datetime
 from discord.ext import commands
-import json
-import datetime
-
 
 def read():
     with open("./data/schedule.json", "r") as f:

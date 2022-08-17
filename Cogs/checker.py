@@ -55,7 +55,6 @@ class dailyCog(commands.Cog, name="ping command"):
                         if rem_m < 0:
                             rem_h = rem_h - 1
                             rem_m = rem_m + 60
-                        print("{}:{}".format(rem_h, rem_m))
                         if (
                             curr_date_rl == curr_date_task
                             and rem_h == datetime.datetime.now().hour

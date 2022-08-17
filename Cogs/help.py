@@ -1,7 +1,5 @@
 import discord
 from discord.ext import commands
-from random import randint
-import random
 
 
 class HelpCog(commands.Cog, name="help command"):

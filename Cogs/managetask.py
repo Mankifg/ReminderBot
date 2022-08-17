@@ -1,5 +1,3 @@
-from calendar import month
-import discord
 from discord.ext import commands
 import json
 
@@ -74,7 +72,7 @@ class addtaskCog(commands.Cog, name="ping command"):
         addSorted(data, task, time, date)
         write(data)
         await ctx.send("Task added.")
-
+        
     @commands.command(
         name="removetask",
         usage=" [task]",
@@ -92,7 +90,6 @@ class addtaskCog(commands.Cog, name="ping command"):
 
         write(data)
         await ctx.send("Task removed.")
-
 
 def setup(bot: commands.Bot):
     bot.add_cog(addtaskCog(bot))

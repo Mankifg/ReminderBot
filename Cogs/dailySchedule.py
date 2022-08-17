@@ -1,13 +1,6 @@
-from ast import alias
-from calendar import WEDNESDAY
-from types import NoneType
 import discord
-from discord.ext import commands, tasks
-from itertools import cycle
-import datetime
-import json
-import asyncio
-import requests, os
+from discord.ext import commands
+import datetime,json,asyncio,requests,os
 from dotenv import load_dotenv
 
 load_dotenv()

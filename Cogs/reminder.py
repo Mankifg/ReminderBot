@@ -1,6 +1,5 @@
-import discord
+import discord, asyncio
 from discord.ext import commands
-import asyncio
 from datetime import datetime
 
 
