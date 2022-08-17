@@ -23,6 +23,15 @@ List of command can be accessed from typing **m!help**. It will show every comma
 Sure, just click [Here](https://discord.com/api/oauth2/authorize?client_id=1008650079390945300&permissions=224256&scope=bot)
 
 # Deployment
+Environment variables must be set in settings of your dyno.
+
+Be sure to turn on the dyno, otherwise it's not going to work.
+
+Timezone must be set to your location using an environment variable. Example:
+```
+TZ=Europe/Ljubljana
+```
+
 [![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
 
 # Contributing
