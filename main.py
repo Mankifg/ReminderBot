@@ -1,7 +1,6 @@
 from itertools import cycle
 import discord
 from discord.ext import commands, tasks
-import json
 import os
 from itertools import cycle
 from dotenv import load_dotenv
@@ -9,11 +8,6 @@ from dotenv import load_dotenv
 # Load .env file
 load_dotenv()
 token = os.getenv('TOKEN')
-
-
-
-
-
 
 status = cycle(["Made by Mankifg#1810","Made by luka heric#9699", "Watching You", "m!help"])
 @tasks.loop(seconds=10)
@@ -28,7 +22,6 @@ class Greetings(commands.Cog):
 
 
 intents = discord.Intents.default()
-
 bot = commands.Bot(
     command_prefix='m!',
     help_command=None,
@@ -36,7 +29,6 @@ bot = commands.Bot(
     intents=intents,
 )
 
-#load cogs
 if __name__ == '__main__':
     for filename in os.listdir("Cogs"):
         if filename.endswith(".py"):
