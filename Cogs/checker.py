@@ -1,4 +1,4 @@
-from time import sleep
+import os
 
 import discord
 from discord.ext import commands
@@ -18,7 +18,7 @@ class DailyCog(commands.Cog, name="ping command"):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        channel = self.bot.get_channel(int(open('data/channel.txt', 'r').read()))
+        channel = self.bot.get_channel(int(os.environ.get("DISCORD_CHANNEL")))
 
         while True:
             await asyncio.sleep(10)

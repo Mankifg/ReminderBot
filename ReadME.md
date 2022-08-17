@@ -6,6 +6,7 @@ It will remind you
 TOKEN=[Discord bot token]
 WEATHER=[OpenWeatherMap Key]
 RAPIDKEY=[Rapid api key]
+DISCORD_CHANNEL=[Discord channel token]
 ```
 
 1. Discord bot token - [Discord Dev Portal](https://discord.com/developers/applications)
