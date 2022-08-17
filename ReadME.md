@@ -6,6 +6,7 @@ It will remind you
 TOKEN=[Discord bot token]
 WEATHER=[OpenWeatherMap Key]
 RAPIDKEY=[Rapid api key]
+DISCORD_CHANNEL=[Discord channel token]
 ```
 
 1. Discord bot token - [Discord Dev Portal](https://discord.com/developers/applications)
@@ -13,7 +14,7 @@ RAPIDKEY=[Rapid api key]
 3. Rapid api key - By creating account [Here](https://rapidapi.com/auth/sign-up?referral=/weatherbit/api/weather) and subscribing to [Here](https://rapidapi.com/weatherbit/api/weather)
 
 # Commands
-List of command can be acccesed from typing **m!help**. It will show every command:
+List of command can be accessed from typing **m!help**. It will show every command:
 
 
 ![Images](/assets/images/help.png)
@@ -21,6 +22,18 @@ List of command can be acccesed from typing **m!help**. It will show every comma
 # Invite bot to server?
 Sure, just click [Here](https://discord.com/api/oauth2/authorize?client_id=1008650079390945300&permissions=224256&scope=bot)
 
+# Deployment
+Environment variables must be set in settings of your dyno.
+
+Be sure to turn on the dyno, otherwise it's not going to work.
+
+Timezone must be set to your location using an environment variable. Example:
+```
+TZ=Europe/Ljubljana
+```
+
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy)
+
 # Contributing
-If you find any issue or have suggestion, fell free to subbimt a **PR**.
+If you find any issue or have suggestion, fell free to submit a **PR**.
 
