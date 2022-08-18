@@ -1,12 +1,15 @@
 # Reminder bot
-It will remind you
+Reminder bot is a discord bot hosted on Heroku created for keeping trak of tasks.
+There are two diffrent types of tasks. There is a so called reminder which can be set for specific hour that day or implemented as countdown.
+There is also a daily schedule siplayed for current day every morning, it also includes weather report. 
+It allows to preset schedule for every day in advance via JSON file or for the current day using chat.
+The bot will automaticly remind you half an hour in advance about tasks on schedule.
 
 # .ENV structure
 ```
 TOKEN=[Discord bot token]
 WEATHER=[OpenWeatherMap Key]
 RAPIDKEY=[Rapid api key]
-DISCORD_CHANNEL=[Discord channel token]
 ```
 
 1. Discord bot token - [Discord Dev Portal](https://discord.com/developers/applications)
