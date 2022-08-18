@@ -10,7 +10,6 @@ The bot will automaticly remind you half an hour in advance about tasks on sched
 TOKEN=[Discord bot token]
 WEATHER=[OpenWeatherMap Key]
 RAPIDKEY=[Rapid api key]
-DISCORD_CHANNEL=[Discord channel token]
 ```
 
 1. Discord bot token - [Discord Dev Portal](https://discord.com/developers/applications)
