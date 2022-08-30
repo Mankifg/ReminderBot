@@ -1,5 +1,3 @@
-import os
-
 import discord
 from discord.ext import commands
 from datetime import datetime
@@ -10,10 +8,10 @@ from helpers import read
 
 dnevi = ["ponedeljek", "torek", "sreda", "četrtek", "petek", "sobota", "nedelja"]
 
-delay = [30]
-
 with open('data/settings.json',"r") as f:
     settings = json.load(f)
+    
+delay = settings["delay"]
 channel = settings["channel"]
 
 class DailyCog(commands.Cog, name="ping command"):

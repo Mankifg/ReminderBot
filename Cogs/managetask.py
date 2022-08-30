@@ -1,7 +1,18 @@
 from datetime import datetime
-
 from discord.ext import commands
-from helpers import read, write
+import json
+
+empty = [",","/","-"," ","."]
+
+pathToSchedule = './data/schedule.json'
+
+def get_data():
+    with open(pathToSchedule, 'r') as f:
+        return json.load(f)
+
+def save(data):
+    with open(pathToSchedule, 'w') as f:
+        json.dump(data, f)
 
 
 def add_sorted(data, task, time, date):
@@ -17,36 +28,70 @@ def add_sorted(data, task, time, date):
     data['tasks'].append({"date": date, "startTime": time, "title": task, "description": "add"})
 
 
-class AddTaskCog(commands.Cog, name="ping command"):
+class AddTaskCog(commands.Cog, name="addtask command"):
     def __init__(self, bot: commands.bot):
         self.bot = bot
 
     @commands.command(name="addtask", usage=" [time] [task]", description="Adds task to everyday routine.",
                       aliases=['at'])
     @commands.cooldown(1, 2, commands.BucketType.member)
-    async def add_task(self, ctx, time, *, task):
-        if len(time) != 16:
-            await ctx.send("Time must be in format YYYY-MM-DD HH:MM")
-            return
+    async def add_task(self, ctx):
+        await ctx.send('Please enter task name:')
 
-        data = read()
-        date, time = time.split()
-        add_sorted(data, task, time, date)
-        write(data)
-        await ctx.send("Task added.")
+        msg = await self.bot.wait_for('message', check=lambda m: m.author == ctx.author and m.channel == ctx.channel)
+        taskname = msg.content.lower()
+
+        await ctx.send(f'Enter start time of **{taskname}**. (Format HH:MM)')
+        msg = await self.bot.wait_for("message", check=lambda m: m.author == ctx.author and m.channel == ctx.channel)
+        time = msg.content.lower()
+        if not (len(time) == 5 and time[2] == ":"):
+            await ctx.send("Invalid time. Please enter time in format HH:MM\nExiting")
+            return
+        
+        await ctx.send("What days of the week task happend?")
+        msg = await self.bot.wait_for("message", check=lambda m: m.author == ctx.author and m.channel == ctx.channel)
+        dates = msg.content.lower()
+
+        await ctx.send(f"Enter description for **{taskname}**. (Type `.`,`/`,`-`,` ` to leave empty)")
+        msg = await self.bot.wait_for("message", check=lambda m: m.author == ctx.author and m.channel == ctx.channel)
+        desc = msg.content.lower()
+
+        for i in range(len(empty)):
+            if desc == empty[i].lower():
+                desc = ""
+
+        await ctx.send(f"{taskname=}, {time=}, {dates=}, {desc=}")
+
+        data = get_data()
+
+        djosn = {
+            "taskname": taskname,
+            "time": time,
+            "days": dates,
+            "description":desc
+        }       
+
+        data["tasks"].append(djosn)
+
+        save(data)
+
+
+
+        
+
 
     @commands.command(name="removetask", usage=" [task]", description="Removes task from everyday routine.",
                       aliases=['rt'])
     @commands.cooldown(1, 2, commands.BucketType.member)
     async def remove_task(self, ctx, task):
-        data = read()
+        # data = 
 
         d = len(data["tasks"])
         for i in range(d):
             if data["tasks"][i]["title"] == task:
                 del data["tasks"][i]
 
-        write(data)
+        #write(data)
         await ctx.send("Task removed.")
 
 
