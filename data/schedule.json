@@ -1,1 +1,1 @@
-{}
+{"tasks": [{"taskname": "abc", "time": "10:10", "days": 1, "description": ""}, {"taskname": "zajtrk", "time": "10:00", "days": 1, "description": ""}, {"taskname": "nvm", "time": "10:01", "days": 1, "description": "idk"}, {"taskname": "abc", "time": "10:10", "days": 7, "description": "a"}, {"taskname": "a", "time": "01:10", "days": 1, "description": ""}, {"taskname": "test", "time": "20:49", "days": "7", "description": ""}, {"taskname": "aa", "time": "20:52", "days": "7", "description": "a"}, {"taskname": "aa", "time": "21:22", "days": "7", "description": "work"}]}

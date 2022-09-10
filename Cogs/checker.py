@@ -3,6 +3,7 @@ from discord.ext import commands
 from datetime import datetime
 import asyncio
 import json
+import datetime
 
 from helpers import read
 
@@ -13,6 +14,8 @@ with open('data/settings.json',"r") as f:
     
 delay = settings["delay"]
 channel = settings["channel"]
+
+opt = "@everyone"
 
 class DailyCog(commands.Cog, name="ping command"):
     def __init__(self, bot: commands.bot):
@@ -26,31 +29,52 @@ class DailyCog(commands.Cog, name="ping command"):
             await asyncio.sleep(10)
             data = read()
 
+            today_n_of_week = datetime.datetime.today().weekday() + 1
+
+            today_format = datetime.datetime.today().strftime("%H:%M")
+
+            if len(today_format) == 4:
+                today_format = "0" + today_format 
+            
             for i in range(len(data['tasks'])):
-                date_of_a_task = datetime.strptime(f"{data['tasks'][i]['date']} {data['tasks'][i]['startTime']}", "%Y-%m-%d %H:%M")
-                current_date = datetime.now()
 
-                t = date_of_a_task.timestamp() - current_date.timestamp()
+                if str(today_n_of_week) in str(data["tasks"][i]["days"]) and str(data['tasks'][i]['time']) == str(today_format):
 
-                if t < 0 and abs(t) < 30:
                     q = discord.Embed(
-                        title=data["tasks"][i]["title"],
+                        title=data["tasks"][i]["taskname"],
                         description=data["tasks"][i]["description"],
                         color=discord.Color.blue()
                         )
-                    await channel.send("@everyone")
-                    await channel.send(embed=q)
+
+                    await ch.send(opt)
+                    await ch.send(embed=q)
+
                     await asyncio.sleep(30)
 
+
+        
+                    
                 for x in range(len(delay)):
-                    t = date_of_a_task.timestamp() - (current_date.timestamp() + delay[x]*60)
-                    if t < 0 and abs(t) < 30:
-                        await channel.send("@everyone")
+
+                    today_h = int(data['tasks'][i]['time'].split(":")[0])
+                    today_m = int(data['tasks'][i]['time'].split(":")[1])
+                    today_m = today_m + delay[x]
+                    if today_m > 59:
+                        today_m = today_m - 60
+                        today_h = today_h + 1
+                    if today_h > 23:
+                        today_h = today_h - 24
+                        if len(today_h) == 1:
+                            today_h = "0" + str(today_h)
+                    
+                    if str(today_n_of_week) in str(data["tasks"][i]["days"]) and str(data['tasks'][i]['time']) == f"{today_h}{today_m}":
+                        await ch.send("@everyone")
                         q = discord.Embed(
-                            title=f'In **{delay[x]}** minutes: {data["tasks"][i]["title"]}',
+                            title=f'In **{delay[x]}** minutes: {data["tasks"][i]["taskname"]}',
                             description=data["tasks"][i]["description"],
                             color=discord.Color.blue()
                         )
+
                         await ch.send(embed=q)
                         await asyncio.sleep(30)
 

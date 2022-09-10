@@ -1,18 +1,11 @@
 from datetime import datetime
 from discord.ext import commands
 import json
+from helpers import read, write
 
 empty = [",","/","-"," ","."]
 
 pathToSchedule = './data/schedule.json'
-
-def get_data():
-    with open(pathToSchedule, 'r') as f:
-        return json.load(f)
-
-def save(data):
-    with open(pathToSchedule, 'w') as f:
-        json.dump(data, f)
 
 
 def add_sorted(data, task, time, date):
@@ -60,9 +53,7 @@ class AddTaskCog(commands.Cog, name="addtask command"):
             if desc == empty[i].lower():
                 desc = ""
 
-        await ctx.send(f"{taskname=}, {time=}, {dates=}, {desc=}")
-
-        data = get_data()
+        data = read()
 
         djosn = {
             "taskname": taskname,
@@ -70,30 +61,24 @@ class AddTaskCog(commands.Cog, name="addtask command"):
             "days": dates,
             "description":desc
         }       
-
         data["tasks"].append(djosn)
 
-        save(data)
-
-
-
-        
-
+        write(data)
+        await ctx.send(f"Added {taskname} to tasks.")
 
     @commands.command(name="removetask", usage=" [task]", description="Removes task from everyday routine.",
                       aliases=['rt'])
     @commands.cooldown(1, 2, commands.BucketType.member)
     async def remove_task(self, ctx, task):
-        # data = 
+        data = read()
 
         d = len(data["tasks"])
         for i in range(d):
-            if data["tasks"][i]["title"] == task:
+            if data["tasks"][i]["taskname"] == task:
                 del data["tasks"][i]
 
-        #write(data)
-        await ctx.send("Task removed.")
-
+        write(data)
+        await ctx.send(f"Removed task {task}")
 
 def setup(bot: commands.Bot):
     bot.add_cog(AddTaskCog(bot))
