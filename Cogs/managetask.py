@@ -9,7 +9,6 @@ pathToSchedule = './data/schedule.json'
 
 
 def add_sorted(data, task, time, date):
-    # Datetime je zelo uporaben modul ;-)
     new_date = datetime.strptime(f"{date} {time}", "%Y-%m-%d %H:%M")
     d = len(data['tasks'])
     for i in range(d):
@@ -37,11 +36,16 @@ class AddTaskCog(commands.Cog, name="addtask command"):
         await ctx.send(f'Enter start time of **{taskname}**. (Format HH:MM)')
         msg = await self.bot.wait_for("message", check=lambda m: m.author == ctx.author and m.channel == ctx.channel)
         time = msg.content.lower()
+
         if not (len(time) == 5 and time[2] == ":"):
-            await ctx.send("Invalid time. Please enter time in format HH:MM\nExiting")
-            return
-        
-        await ctx.send("What days of the week task happend?")
+            if not len(time) == 4:
+                
+                await ctx.send("Invalid time. Please enter time in format HH:MM\nExiting")
+                return
+            else:
+                time = f"0{time}"
+
+        await ctx.send("What days of the week task happened?")
         msg = await self.bot.wait_for("message", check=lambda m: m.author == ctx.author and m.channel == ctx.channel)
         dates = msg.content.lower()
 
