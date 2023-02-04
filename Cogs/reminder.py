@@ -13,6 +13,7 @@ class ReminderCog(commands.Cog, name="ping command"):
         description="It will remind you with preset message.",
         aliases=["r"],
     )
+
     @commands.cooldown(1, 2, commands.BucketType.member)
     async def remind(self, ctx, t, *, message="Reminder!"):
         valid_ends = ["s", "m", "h", "d", "w"]
@@ -61,13 +62,12 @@ class ReminderCog(commands.Cog, name="ping command"):
             )
             await asyncio.sleep(time)
             await remind.delete()
-            await ctx.send(ctx.author.mention)
             q = discord.Embed(
                 title=f"Reminder",
                 description=f"{message}",
                 color=discord.Color.dark_blue(),
             )
-            await ctx.send(embed=q)
+            await ctx.send(ctx.message.author.mention, embed=q)
 
 
 def setup(bot: commands.Bot):
